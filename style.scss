@@ -1,6 +1,80 @@
 //21130035_Nguyễn_Ngọc_Khánh_Duy_0839151003
 
+$blackColor: #000000;
+$whiteColor: #ffffff;
+
 * {
   box-sizing: border-box;
   font-family: Tahoma, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
+
+html, body {
+  height: 100%;
+}
+
+.container {
+  width: 80%;
+  height: 100%;
+  margin: 0 auto;
+  background-color: burlywood;
+
+  .navigate {
+    text-align: center;
+    height: 60px;
+    line-height: 60px;
+    border-bottom: 2px solid $blackColor;
+  }
+
+  .main {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - 60px);
+    text-align: center;
+
+    .score {
+      #myScore {
+        margin-top: 30px;
+      }
+    }
+
+    .board {
+      width: 500px;
+      height: 500px;
+      background-color: yellow;
+      display: grid;
+      grid-template: repeat(20, 1fr) / repeat(20, 1fr);
+      border-left: 2px solid $blackColor;
+      border-right: 2px solid $blackColor;
+
+      &__snake {
+        background-color: blue;
+      }
+
+      &__food {
+        //display: none;
+        background-color: red;
+      }
+    }
+
+    .level {
+      &__title {
+        margin-bottom: 30px;
+      }
+
+      &__item {
+        list-style: none;
+        height: 30px;
+        line-height: 30px;
+        background-color: aqua;
+        margin: 20px 10px;
+      }
+    }
+  }
+}
+
+
+
