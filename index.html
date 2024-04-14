@@ -10,28 +10,44 @@
     <div class="container">
         <div class="navigate">
             <h1>Snake Game</h1>
+            <img class="setting" src="./assets/settings.png" alt="">
         </div>
         <div class="main">
-            <div class="score">
-                <h2>Score</h2>
-                <h2 id="myScore">0</h2>
+            <div id="outBoard">
+                <canvas id="board"></canvas>
             </div>
-<!--            <div class="board">-->
-<!--&lt;!&ndash;                <div class="board__snake"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;                <div class="board__food"></div>&ndash;&gt;-->
-<!--            </div>-->
-
-            <canvas id="board"></canvas>
-            <div class="level">
-                <h2 class="level__title">All Level</h2>
-                <ul class="level__list">
-                    <li class="level__item">Level 1</li>
-                    <li class="level__item">Level 2</li>
-                    <li class="level__item">Level 3</li>
-                    <li class="level__item">Level 4</li>
-                    <li class="level__item">Level 5</li>
-                </ul>
+            <div class="wrapper">
+                <div class="score">
+                    <h2>Score <span id="myScore">0</span></h2>
+                </div>
+                <div class="level">
+                    <h2 class="level__title">Level</h2>
+                    <div class="box">
+                        <ul class="level__list">
+                            <li class="level__item">Level 1</li>
+                            <li class="level__item">Level 2</li>
+                            <li class="level__item">Level 3</li>
+                            <li class="level__item">Level 4</li>
+                            <li class="level__item">Level 5</li>
+                        </ul>
+<!--                        <ul class="level__list">-->
+<!--                            <li class="level__item">Level 1</li>-->
+<!--                            <li class="level__item">Level 2</li>-->
+<!--                            <li class="level__item">Level 3</li>-->
+<!--                            <li class="level__item">Level 4</li>-->
+<!--                            <li class="level__item">Level 5</li>-->
+<!--                        </ul>-->
+                    </div>
+                </div>
             </div>
+        </div>
+    </div>
+    <div class="modal modal-close">
+        <div class="modal-container">
+            <img class="close" src="./assets/close.png" alt="">
+            <h2>Lose</h2>
+            <h3>Your Score: <span>0</span></h3>
+            <button id="restart">Restart</button>
         </div>
     </div>
     <script src="./main.js"></script>
