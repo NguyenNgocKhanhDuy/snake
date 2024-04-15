@@ -216,4 +216,17 @@ html, body {
   height: 50px;
 }
 
+.change-opacity {
+  animation: changeOpacity 0.25s ease-in forwards;
+}
+
+@keyframes changeOpacity {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
 /*# sourceMappingURL=style.css.map */

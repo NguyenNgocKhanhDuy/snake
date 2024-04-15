@@ -73,7 +73,12 @@ listDesc.push('<li>Level này xuất hiện các vách tường (ô màu đỏ) 
 
 let htmlList = `<li>Ô xanh lá là đầu rắn, xanh dương là thân rắn</li>
                         <li> <img src="./assets/apple.png"> Táo, ăn táo để tăng điểm và kích thước, điểm ở mức độ nhất định sẽ tăng level</li>
-                        <li>Dùng các nút điều hướng (lên, xuống, trái, phải) để điều khiển</li>
+                        <li>Dùng các nút điều hướng (lên, xuống, trái, phải) để điều khiển
+                            <img class="abc" id="left" src="./assets/left.png" alt=""> 
+                            <img class="" id="right" src="./assets/right.png" alt=""> 
+                            <img class="" id="up" src="./assets/up.png" alt=""> 
+                            <img class="" id="down" src="./assets/down.png" alt=""> 
+                        </li>
                         <li> Thua khi rắn tự cắn mình</li>`
 
 let htmlListLevel;
@@ -184,8 +189,47 @@ function changeDirection(e) {
             moveX = 0
             moveY = 1
         }
+    }else {
+        left = document.querySelector("#left")
+        right = document.querySelector("#right")
+        up = document.querySelector("#up")
+        down = document.querySelector("#down")
+
+        if (e.keyCode == 37) {
+            left.style.opacity = '0.5'
+        }else if (e.keyCode == 38){
+            up.style.opacity = '0.5'
+        }else if(e.keyCode == 39){
+            right.style.opacity='0.5'
+        }else if (e.keyCode == 40){
+            down.style.opacity='0.5'
+        }
     }
 }
+function changeOpacity(e) {
+    // trái, lên, phải, xuống === 37, 38, 39, 40
+   if (modalPlay.style.display == "flex") {
+        left = document.querySelector("#left")
+        right = document.querySelector("#right")
+        up = document.querySelector("#up")
+        down = document.querySelector("#down")
+
+        if (e.keyCode == 37) {
+            left.style.opacity='1'
+        }else if (e.keyCode == 38){
+            up.style.opacity='1'
+        }else if(e.keyCode == 39){
+            right.style.opacity='1'
+        }else if (e.keyCode == 40){
+            down.style.opacity='1'
+        }
+    }
+}
+
+document.addEventListener("keyup", changeOpacity)
+
+
+
 
 
 
