@@ -28,7 +28,7 @@ html, body {
     position: relative;
     color: $whiteColor;
 
-    .setting {
+    .question {
       width: 25px;
       height: 25px;
       position: absolute;
@@ -104,8 +104,9 @@ html, body {
   }
 }
 
+
 .modal {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   position: fixed;
@@ -116,14 +117,20 @@ html, body {
   background-color: rgba(0, 0, 0, 0.6);
 
   .modal-container{
-    width: 400px;
-    height: 300px;
     background-color: $whiteColor;
     text-align: center;
     border-radius: 4px;
     border: 1px solid $blackColor;
     padding: 40px;
     position: relative;
+
+    .wrapper{
+      display: flex;
+      margin: 40px 0;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
 
     .close {
       width: 20px;
@@ -148,7 +155,7 @@ html, body {
       font-weight: 400;
     }
 
-    #restart {
+    button {
       width: 150px;
       height: 40px;
       font-size: 20px;
@@ -166,5 +173,92 @@ html, body {
   }
 }
 
+.modal-close {
+  display: none;
+
+  .modal-container {
+    width: 400px;
+    height: 300px;
+  }
+}
+
+.modal-play {
+  .modal-container {
+    width: 1000px;
+    height: 600px;
+
+    .wrapper {
+      .video {
+        width: 50%;
+      }
+
+      .desc {
+        width: 50%;
+        h3 {
+          margin-top: 0;
+          font-size: 20px;
+          font-weight: 600;
+        }
+      }
+
+      ul {
+        padding-left: 20px;
+
+
+        li{
+          text-align: left;
+          margin: 20px 0;
+          font-size: 18px;
+
+          img {
+            width: 30px;
+            height: 30px;
+          }
+        }
+      }
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      width: 50px;
+      cursor: pointer;
+      transition: all 0.25s ease-in;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    #next {
+      right: 0;
+      transform: translateX(50%);
+    }
+
+    #previous {
+      left: 0;
+      transform: translateX(-50%);
+    }
+
+    button {
+      margin: 0;
+    }
+  }
+}
+
+.modal-question {
+  .modal-container {
+    width: 450px;
+    height: 450px;
+    .wrapper {
+      flex-direction: column;
+    }
+
+    button {
+      width: 200px;
+      height: 50px;
+    }
+  }
+}
 
 

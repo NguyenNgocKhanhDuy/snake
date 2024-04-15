@@ -10,7 +10,7 @@
     <div class="container">
         <div class="navigate">
             <h1>Snake Game</h1>
-            <img class="setting" src="./assets/settings.png" alt="">
+            <img class="question" src="assets/question.png" alt="">
         </div>
         <div class="main">
             <div id="outBoard">
@@ -44,10 +44,32 @@
     </div>
     <div class="modal modal-close">
         <div class="modal-container">
-            <img class="close" src="./assets/close.png" alt="">
             <h2>Lose</h2>
-            <h3>Your Score: <span>0</span></h3>
+            <h3>Your Score: <span id="score">0</span></h3>
             <button id="restart">Restart</button>
+        </div>
+    </div>
+
+    <div class="modal modal-play">
+        <div class="modal-container">
+            <h2>How to play</h2>
+            <div class="wrapper">
+
+            </div>
+            <button id="start">Bắt đầu</button>
+            <img class="arrow" id="next" src="./assets/next.png" alt="">
+            <img class="arrow" id="previous" src="./assets/previous.png" alt="">
+        </div>
+    </div>
+
+    <div class="modal modal-question">
+        <div class="modal-container">
+            <h2>Thông tin</h2>
+            <div class="wrapper">
+                <button id="how-to-play">Hướng dẫn chơi</button>
+                <button id="info">Thông tin</button>
+                <button id="resume">Tiếp tục</button>
+            </div>
         </div>
     </div>
     <script src="./main.js"></script>

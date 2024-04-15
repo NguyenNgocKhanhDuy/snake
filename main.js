@@ -35,6 +35,119 @@ window.onload = function () {
     context = board.getContext("2d");
 }
 
+modalLose = document.querySelector(".modal-close")
+modalLoseScore = document.querySelector(".modal-close #score")
+modalLoseRestart = document.querySelector(".modal-close #restart")
+
+function showModalLose() {
+    modalLose.style.display = "flex"
+    modalLoseScore.textContent = countToUpLv
+    console.log(countToUpLv)
+}
+
+modalLoseRestart.addEventListener("click", function () {
+    modalLose.style.display = "none"
+    restartGame()
+})
+
+modalPlay = document.querySelector(".modal-play")
+modalPlayContainerWrapper = document.querySelector(".modal-play .modal-container .wrapper")
+modalPlayStart = document.querySelector(".modal-play #start")
+modalPlayNext = document.querySelector(".modal-play #next")
+modalPlayPrevious = document.querySelector(".modal-play #previous")
+
+modalPlayNext.style.display = "none"
+modalPlayPrevious.style.display = "none"
+
+modalPlayStart.addEventListener("click", function () {
+    modalPlay.style.display = "none"
+    changeDirection
+})
+
+let listVideo = ['play1', 'play2', 'play3']
+let listDesc = []
+listDesc.push('<li>Level này rắn có khả năng xuyên tường</li>')
+listDesc.push('<li>Level này rắn không có khả năng xuyên tường</li>')
+listDesc.push('<li>Level này xuất hiện các vách tường (ô màu đỏ) khi rắn đụng sẽ thua</li>' +
+              '<li>Level này rắn không có khả năng xuyên tường</li>')
+
+let htmlList = `<li>Ô xanh lá là đầu rắn, xanh dương là thân rắn</li>
+                        <li> <img src="./assets/apple.png"> Táo, ăn táo để tăng điểm và kích thước, điểm ở mức độ nhất định sẽ tăng level</li>
+                        <li>Dùng các nút điều hướng (lên, xuống, trái, phải) để điều khiển</li>
+                        <li> Thua khi rắn tự cắn mình</li>`
+
+let htmlListLevel;
+let modalDescList
+function showModalHowToPlay(isSetting) {
+    if (isSetting){
+        modalPlayNext.style.display = "block"
+        modalPlayPrevious.style.display = "block"
+    }
+
+    htmlListLevel = listDesc[level-1]
+    modalPlayContainerWrapper.innerHTML = `
+                <img class="video" src="./assets/${listVideo[level-1]}.gif"/>
+                <div class="desc">
+                    <h3 id="level">Level ${level}</h3>
+                    <ul class="desc--list">
+                        
+                    </ul>
+                </div>`
+    modalDescList = document.querySelector(".modal-play .desc--list")
+    modalDescList.innerHTML = htmlList + htmlListLevel
+    modalPlay.style.display = "flex"
+}
+showModalHowToPlay()
+
+
+var index = 0;
+function changeHowToPlay() {
+    modalPlayLevel = document.querySelector("#level")
+    modalPlayVideo = document.querySelector(".modal-play .video")
+    modalDescList = document.querySelector(".modal-play .desc--list")
+    if (event.target.id == "next"){
+        if (index == listVideo.length-1){
+            index = 0
+        }else {
+            index++;
+        }
+
+
+    }else if(event.target.id == "previous"){
+        if (index == 0){
+            index = listVideo.length-1
+        }else {
+            index--;
+        }
+    }
+
+    modalPlayVideo.src = `./assets/${listVideo[index]}.gif`
+    htmlListLevel = listDesc[index]
+    modalDescList.innerHTML = htmlList + htmlListLevel;
+    modalPlayLevel.textContent = `Level ${index+1}`
+}
+
+modalPlayNext.addEventListener("click", changeHowToPlay)
+modalPlayPrevious.addEventListener("click", changeHowToPlay)
+
+question = document.querySelector(".question")
+modalQuestion = document.querySelector(".modal-question")
+modalQuestionHowToPlay = document.querySelector(".modal-question #how-to-play")
+modalQuestionInfo = document.querySelector(".modal-question #info")
+modalQuestionResume = document.querySelector(".modal-question #resume")
+question.addEventListener("click", function (){
+    modalQuestion.style.display = "flex"
+    clearInterval(te)
+})
+
+modalQuestionHowToPlay.addEventListener("click", function () {
+    showModalHowToPlay(true)
+})
+
+modalQuestionResume.addEventListener("click", function () {
+    modalQuestion.style.display = "none"
+    run()
+})
 
 // Hàm tạo food ngẫu nhiên
 function randomFood() {
@@ -57,21 +170,21 @@ function randomFood() {
 // Hàm di chuyển theo hướng mũi tên
 function changeDirection(e) {
     // trái, lên, phải, xuống === 37, 38, 39, 40
-
-    if (e.keyCode == 37 && moveX != 1) {
-        moveX = -1
-        moveY = 0
-    }else if (e.keyCode == 38 && moveY != 1){
-        moveX = 0
-        moveY = -1
-    }else if(e.keyCode == 39 && moveX != -1){
-        moveX = 1
-        moveY = 0
-    }else if (e.keyCode == 40 && moveY != -1){
-        moveX = 0
-        moveY = 1
+    if (modalPlay.style.display == "none"){
+        if (e.keyCode == 37 && moveX != 1) {
+            moveX = -1
+            moveY = 0
+        }else if (e.keyCode == 38 && moveY != 1){
+            moveX = 0
+            moveY = -1
+        }else if(e.keyCode == 39 && moveX != -1){
+            moveX = 1
+            moveY = 0
+        }else if (e.keyCode == 40 && moveY != -1){
+            moveX = 0
+            moveY = 1
+        }
     }
-
 }
 
 
@@ -120,11 +233,9 @@ function mainProcess() {
     context.fillStyle="green"
     for (let i = 0; i < snakeBody.length; i++) {
         if (i == 0) {
-            // context.drawImage(headImg, snakeBody[i][0], snakeBody[i][1], recSize, recSize)
             context.fillStyle='#03F100'
         }else{
             context.fillStyle='#007BF1'
-            // context.drawImage(bodyImg, snakeBody[i][0], snakeBody[i][1], recSize, recSize)
         }
         context.fillRect(snakeBody[i][0], snakeBody[i][1], recSize, recSize)
     }
@@ -136,7 +247,6 @@ function mainProcess() {
 
 if (level == 3){
     drawLv3()
-    console.log('ok')
 }
 randomFood()
 
@@ -153,7 +263,7 @@ function checkBite() {
     for (let i = 1; i < snakeBody.length; i++) {
         if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]){
             gameOver = true
-            alert("thua")
+            showModalLose()
         }
     }
 }
@@ -171,13 +281,14 @@ function restartGame() {
     snakeBody = []
     gameOver = false
     score.textContent = 0
+    showModalHowToPlay()
 }
 
 
 function level2() {
     if (snakeX < 0 || snakeX > (rows * recSize) || snakeY < 0 || snakeY > (cols * recSize)) {
         gameOver = true;
-        alert("thua")
+        showModalLose()
     }
 }
 
@@ -186,7 +297,7 @@ function level3() {
     for (let i = 0; i < wall.length; i++) {
         if (snakeX == wall[i][0]*recSize && snakeY == wall[i][1]*recSize){
             gameOver = true
-            alert('Thua')
+            showModalLose()
         }
     }
 }
@@ -194,11 +305,6 @@ function level3() {
 
 
 function drawLv3() {
-    // wall = [[2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [4, 2], [5, 3], [5, 4], [5, 5], [4, 6], [3, 6]
-    //     , [8, 8], [8, 9], [8, 10], [8, 11], [8, 12], [9, 12], [10, 12], [11, 12], [12, 12], [12, 11], [12, 10], [12, 9], [12, 8]
-    //     , [14, 14], [15, 15], [16, 16], [17, 15], [18, 14], [16, 17], [16, 18]
-    // ]
-
     for (let i = 0; i < cols; i++) {
         if (i < (cols - 5)){
             wall.push([i, 3])
@@ -232,9 +338,10 @@ function upgradeLevel() {
     if (countToUpLv == 5){
         level++
         countToUpLv = 0
+        restartGame()
     }
     if (level == 3){
-        // drawLv3()
+        drawLv3()
     }
     setLevelBg()
 }
@@ -258,25 +365,19 @@ function selectLevel() {
 selectLevel()
 function setLevelBg() {
     for (let i = 0; i < levels.length; i++) {
-        // if (i == level-1){
-        //     levels[i].style.backgroundColor='cyan'
-        // }else {
-        //     levels[i].style.backgroundColor='black'
-        //     levels[i].style.color='white'
-        // }
+        if (i == level-1){
+            levels[i].style.backgroundColor='#3069a4'
+            levels[i].style.color='white'
+        }else {
+            levels[i].style.backgroundColor='black'
+            levels[i].style.color='white'
+        }
     }
 }
 document.addEventListener("keydown", changeDirection)
-var te = setInterval(mainProcess, 1000/10)
 
-modalLose = document.querySelector(".modal-close")
-modalLoseClose = document.querySelector(".modal-close .close")
-modalLoseRestart = document.querySelector(".modal-close #restart")
+function run() {
+     te = setInterval(mainProcess, 1000/10)
+}
 
-modalLoseClose.addEventListener("click", function () {
-    modalLose.style.display = "none"
-})
-
-modalLoseRestart.addEventListener("click", function () {
-    modalLose.style.display = "none"
-})
+run()
