@@ -55,16 +55,29 @@ html, body {
       height: 100%;
       padding: 40px;
 
-      .score{
-        height: 50px;
-        margin-bottom: 40px;
+      .param {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: $whiteColor;
 
-        #myScore {
-          display: block;
-          margin-top: 10px;
+        .time{
+          width: 50%;
+          display: none;
+        }
+
+        .score{
+          width: 50%;
+          height: 50px;
+          margin-bottom: 40px;
+
+          #myScore {
+            display: block;
+            margin-top: 10px;
+          }
         }
       }
+
 
       .level {
         border: 2px solid #05013e;
@@ -123,10 +136,15 @@ html, body {
     border: 1px solid $blackColor;
     padding: 40px;
     position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 40px;
 
     .wrapper{
       display: flex;
-      margin: 40px 0;
+      //margin: 40px 0;
       align-items: center;
       justify-content: space-between;
       gap: 20px;
@@ -159,7 +177,7 @@ html, body {
       width: 150px;
       height: 40px;
       font-size: 20px;
-      margin-top: 40px;
+      //margin-top: 40px;
       color: $whiteColor;
       background-color: $blackColor;
       border-radius: 4px ;
@@ -174,20 +192,16 @@ html, body {
 }
 
 .modal-close {
-  display: none;
-
   .modal-container {
-    width: 400px;
-    height: 300px;
+    //width: 400px;
+    //height: 300px;
   }
 }
 
 .modal-play {
   .modal-container {
-    width: 1000px;
-    height: 600px;
-
     .wrapper {
+      margin: 0;
       .video {
         width: 50%;
       }
@@ -203,7 +217,6 @@ html, body {
 
       ul {
         padding-left: 20px;
-
 
         li{
           text-align: left;
@@ -240,16 +253,11 @@ html, body {
       transform: translateX(-50%);
     }
 
-    button {
-      margin: 0;
-    }
   }
 }
 
 .modal-question {
   .modal-container {
-    width: 450px;
-    height: 450px;
     .wrapper {
       flex-direction: column;
     }
@@ -261,16 +269,22 @@ html, body {
   }
 }
 
-.change-opacity{
-  animation: changeOpacity 0.25s ease-in forwards;
+.modal-info {
+  .modal-container {
+    background: url("./assets/logo.jpg") top 10px right 10px / 80px no-repeat #fff;
+
+    ul {
+      text-align: left;
+      text-shadow: 0 0 5px #fff;
+
+      li{
+        list-style: none;
+        margin: 20px 0;
+        font-size: 18px;
+      }
+    }
+  }
 }
 
-@keyframes changeOpacity {
-  0%{
-    opacity: 1;
-  }
-  100%{
-    opacity: 0.5;
-  }
-}
+
 
