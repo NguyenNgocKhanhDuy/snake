@@ -57,6 +57,10 @@ html, body {
   width: 50%;
   display: none;
 }
+.container .main .wrapper .param .time #time {
+  display: block;
+  margin-top: 10px;
+}
 .container .main .wrapper .param .score {
   width: 50%;
   height: 50px;

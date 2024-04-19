@@ -64,6 +64,11 @@ html, body {
         .time{
           width: 50%;
           display: none;
+
+          #time {
+            display: block;
+            margin-top: 10px;
+          }
         }
 
         .score{
