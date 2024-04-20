@@ -63,8 +63,6 @@ html, body {
 }
 .container .main .wrapper .param .score {
   width: 50%;
-  height: 50px;
-  margin-bottom: 40px;
 }
 .container .main .wrapper .param .score #myScore {
   display: block;
@@ -81,7 +79,6 @@ html, body {
 }
 .container .main .wrapper .level .box {
   display: flex;
-  align-items: center;
   justify-content: space-evenly;
 }
 .container .main .wrapper .level__item {
@@ -89,8 +86,6 @@ html, body {
   list-style: none;
   height: 40px;
   line-height: 40px;
-  color: #ffffff;
-  background-color: #000000;
   margin: 20px 10px;
   border-radius: 4px;
   border: 1px solid #000000;
@@ -113,6 +108,7 @@ html, body {
   background-color: rgba(0, 0, 0, 0.6);
 }
 .modal .modal-container {
+  max-width: 1000px;
   background-color: #ffffff;
   text-align: center;
   border-radius: 4px;

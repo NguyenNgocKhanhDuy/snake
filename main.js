@@ -10,66 +10,73 @@ var context;
 var gameOver = false
 
 // Toạ độ thức ăn
-let foodX = 0;
-let foodY = 0;
+var foodX = 0;
+var foodY = 0;
 
 // Toạ độ thức ăn vàng
-let goldFoodX = 0;
-let goldFoodY = 0;
+var goldFoodX = 0;
+var goldFoodY = 0;
 
 // Toạ độ rắn
-let snakeX = recSize*10;
-let snakeY = recSize*10;
+var snakeX = recSize*10;
+var snakeY = recSize*10;
 
 // Sử dụng cho hướng di chuyển của rắn
-let moveX = 0;
-let moveY = 0;
+var moveX = 0;
+var moveY = 0;
 
 // Thành phần của rắn
-let snakeBody = []
+var snakeBody = []
 
 // Điểm
-let score = document.getElementById("myScore")
+var score = document.getElementById("myScore")
 // Các cấp độ
-let levels = document.querySelectorAll(".level__item")
+var levels = document.querySelectorAll(".level__item")
 // Biến kiểm tra tăng level
-let countToUpLv = 0;
+var countToUpLv = 0;
 // Biến level
-let level = 1;
+var level = 1;
 // Tường (vật cản)
-let wall = []
+var wall = []
 
-let mn = 0
-let countTime = 5;
-let intervalRanTime = 0;
-let intervalCountTime = 0;
+var mn = 0
+var countTime = 5;
+var intervalRanTime = 0;
+var intervalCountTime = 0;
 
 // Kiểm tra sau khi ăn thức ăn vàng
-let isGold;
-let start5 ;
+var isGold;
+var start ;
 // Cổng dịch chuyển
-let gateIn=[[16, 11], [4, 18]];
-let gateOut=[[16, 3], [4, 10]];
+var gateIn=[[16, 11], [4, 18]];
+var gateOut=[[16, 3], [4, 10]];
+
+var trapX = 0
+var trapY = 0
+var intervalTrapTime = 0
 
 // Hiển thị thời gian chơi
-timeBlock = document.querySelector(".time")
+var timeBlock = document.querySelector(".time")
 
-timeShow = document.querySelector("#time")
+var timeShow = document.querySelector("#time")
 
 
 // Thời gian chơi của level 2
-let timeGame = 10
-let intervalTimeGame = 0
+var timeGame = 10
+var intervalTimeGame = 0
 
 // Tạo hình sử dụng cho thức ăn
-let foodImg = new Image()
+var foodImg = new Image()
 // Gán đường dẫn
 foodImg.src = "./assets/apple.png"
 
 // Tạo hình sử dụng cho thức ăn vàng
-let goldFoodImg = new Image()
+var goldFoodImg = new Image()
 // Gán đường dẫn
 goldFoodImg.src = "./assets/golden-apple.png"
+
+var trapImg = new Image()
+trapImg.src = './assets/trap.png'
 
 // Khởi tạo ban đầu
 window.onload = function () {
@@ -118,26 +125,41 @@ modalPlayPrevious.style.display = "none"
 modalPlayStart.addEventListener("click", function () {
     modalPlay.style.display = "none"
     changeDirection
+    if (level == 3){
+        runLv3()
+    }else if (level == 5){
+        runLv5()
+    }else if (level == 7){
+        runLv7()
+    }
 })
 
 // Khai báo tên các hình gif dùng cho hướng dẫn chơi theo từng level
-let listVideo = ['play1', 'play2', 'play3', 'play1', 'play2', 'play1']
+let listVideo = ['level1', 'level2', 'level3', 'level4', 'level5', 'level6', 'level7']
 // Khai báo phần nội dung dùng cho hướng dẫn chơi theo từng level
 let listDesc = []
-listDesc.push('<li>Level này rắn có khả năng xuyên tường</li>')
-listDesc.push('<li>Level này rắn không có khả năng xuyên tường</li>')
-listDesc.push('<li>Level này xuất hiện các vách tường (ô màu đỏ) khi rắn đụng sẽ thua</li>' +
-              '<li>Level này rắn không có khả năng xuyên tường</li>')
+listDesc.push('<li>Level này rắn có khả năng xuyên tường màn chơi</li>')
+listDesc.push('<li>Level này rắn không có khả năng xuyên tường màn chơi</li>')
+listDesc.push('<li>Level này rắn không có khả năng xuyên tường và sẽ giới hạn thời gian 10 giây</li>' +
+              '<li>Khi ăn thức ăn sẽ tăng thêm 3 giây thức ăn sẽ thay đổi vị trí sau 3 giây</li>')
+listDesc.push('<li>Level này rắn không có khả năng xuyên tường màn chơi</li>' +
+              '<li>Level này xuất hiện các vách tường (ô màu đỏ) khi rắn đụng sẽ thua</li>')
+listDesc.push('<li>Level này rắn không có khả năng xuyên tường màn chơi</li>' +
+              '<li>Level này xuất hiện các vách tường (ô màu đỏ) khi rắn đụng sẽ thua</li>' +
+              '<li>Level này xuất hiện táo vàng khi ăn sẽ cho khả năng xuyên các vách tường (không thể xuyên bàn chơi) trong 5 giây</li>')
+listDesc.push('<li>Level này rắn có khả năng xuyên tường màn chơi</li>' +
+              '<li>Level này xuất hiện các vách tường (ô màu đỏ) khi rắn đụng sẽ thua</li>' +
+              '<li>Level này xuất hiện các cổng dịch chuyển, các cổng có đánh số là cổng rắn có thể đi vào và ra ở màu tương ứng</li>')
+listDesc.push('<li>Level này rắn có khả năng xuyên tường màn chơi</li>' +
+              '<li>Level này xuất hiện các vách tường (ô màu đỏ) khi rắn đụng sẽ thua</li>' +
+              '<li>Level này xuất hiện các bẫy tự thay đổi ngẫu nhiên sau 2s, khi rắn trúng bẫy sẽ giảm đi 1 điểm và khi không còn sẽ thua</li>')
 
-let htmlList = `<li>Ô xanh lá là đầu rắn, xanh dương là thân rắn</li>
-                        <li> <img src="./assets/apple.png"> Táo, ăn táo để tăng điểm và kích thước, điểm ở mức độ nhất định sẽ tăng level</li>
-                        <li>Dùng các nút điều hướng (lên, xuống, trái, phải) để điều khiển <br>
+let htmlList = `<li>Dùng các nút điều hướng (lên, xuống, trái, phải) để điều khiển <br>
                             <img class="abc" id="left" src="./assets/left.png" alt=""> 
                             <img class="" id="right" src="./assets/right.png" alt=""> 
                             <img class="" id="up" src="./assets/up.png" alt=""> 
                             <img class="" id="down" src="./assets/down.png" alt=""> 
-                        </li>
-                        <li> Thua khi rắn tự cắn mình</li>`
+                        </li>`
 
 let htmlListLevel;
 let modalDescList;
@@ -165,7 +187,7 @@ function showModalHowToPlay(isSetting) {
                 </div>`
     modalDescList = document.querySelector(".modal-play .desc--list")
     modalDescList.innerHTML = htmlList + htmlListLevel
-    modalPlay.style.display = "none"
+    modalPlay.style.display = "flex"
 }
 showModalHowToPlay()
 
@@ -295,10 +317,36 @@ function randomGoldFood() {
             }
         }
     }
-    start5 = true
+    start = true
     // isGold = false
     countTime = 5
     clearInterval(intervalCountTime)
+}
+
+function randomTrap() {
+    trapX = Math.floor(Math.random() * cols) * recSize
+    trapY = Math.floor(Math.random() * rows) * recSize
+    for (let i = 0; i < snakeBody.length; i++) {
+        if (trapX == snakeBody[i][0] && trapY == snakeBody[i][1]){
+            randomTrap()
+        }
+    }
+    if((trapX == foodX && trapY == foodY)){
+        randomTrap()
+    }
+    // Kiểm tra nếu random vào tường thì sẽ random lại
+    if (wall.length > 0){
+        for (let i = 0; i < wall.length; i++) {
+            if (trapX == (wall[i][0]*recSize) && trapY == (wall[i][1]*recSize)){
+                randomTrap()
+            }
+        }
+    }
+    start = true
+}
+
+function ranTrapTime() {
+    intervalTrapTime = setInterval(randomTrap, 2000)
 }
 
 // Hàm di chuyển theo hướng mũi tên
@@ -395,7 +443,7 @@ function mainProcess() {
     context.drawImage(foodImg, foodX, foodY, recSize, recSize)
 
     // Kiểm tra để vẽ thức ăn vàng
-    if (!isGold && level == 5 && start5 == true){
+    if (!isGold && level == 5 && start == true){
         context.drawImage(goldFoodImg, goldFoodX, goldFoodY, recSize, recSize)
     }
 
@@ -437,6 +485,11 @@ function mainProcess() {
             // Nhân với recSize ra được vị trí đúng
             context.fillRect(gateIn[i][0]*recSize, gateIn[i][1]*recSize, recSize, recSize)
             context.fillRect(gateOut[i][0]*recSize, gateOut[i][1]*recSize, recSize, recSize)
+            context.fillStyle="black"
+            context.font = '25px san-serif';
+            context.textAlign='center'
+            context.textBaseline='middle'
+            context.fillText(i+1, gateIn[i][0]*recSize + recSize/2, gateIn[i][1]*recSize + recSize/2,recSize)
 
             // Nếu rắn đi vào cổng vào
             if (snakeX == gateIn[i][0]*recSize && snakeY == gateIn[i][1]*recSize){
@@ -447,6 +500,12 @@ function mainProcess() {
             }
 
         }
+    }
+
+    if (level == 7 && start == true){
+        // context.fillStyle = 'white'
+        context.drawImage(trapImg, trapX, trapY, recSize, recSize)
+        // context.fillRect(trapX, trapY, recSize, recSize)
     }
 
     // Rắn di chuyển, theo kiểu sẽ di chuyển 1 phần từ sau lên phần từ trước
@@ -489,16 +548,16 @@ function setUpLv() {
         drawLv2()
     }else if(level == 3){
         drawLv2()
-        ranFTime()
-        timeShow.textContent = timeGame
-        intervalTimeGame = setInterval(time, 1000)
+
     }else if (level == 4){
         drawLv4()
     }else if(level == 5){
         drawLv5()
-        ranGFTime()
     }else if (level == 6){
         drawLv6()
+    }else if (level == 7){
+        drawLv7()
+
     }
 
     if (level != 3){
@@ -512,15 +571,31 @@ function setUpLv() {
         clearInterval(intervalRanTime)
         clearInterval(intervalCountTime)
     }
+    // if (level != 7){
+    //     clearInterval(intervalTrapTime)
+    // }
     randomFood()
 }
 setUpLv()
+function runLv3() {
+    ranFTime()
+    timeShow.textContent = timeGame
+    intervalTimeGame = setInterval(time, 1000)
+}
+
+function runLv5() {
+    ranGFTime()
+}
+
+function runLv7() {
+    ranTrapTime()
+}
 // Gọi hàm tạo thức ăn
 function ranGFTime() {
-    intervalRanTime = setInterval(randomGoldFood, 5000)
+    intervalRanTime = setInterval(randomGoldFood, 3000)
 }
 function ranFTime() {
-    mn = setInterval(randomFood, 5000)
+    mn = setInterval(randomFood, 3000)
 }
 // Hàm ăn thức ăn
 function eatFood() {
@@ -536,8 +611,9 @@ function eatFood() {
         score.textContent = countToUpLv
 
         if (level == 3){
-            if (timeGame < 10){
-                timeGame += 3
+            timeGame += 3
+            if (timeGame > 10){
+                timeGame = 10
             }
             clearInterval(mn)
             randomFood()
@@ -650,6 +726,7 @@ function restartGame() {
     showModalHowToPlay()
     setUpLv()
     isGold = false
+    start = false
 }
 
 // level 2 rắn không thể xuyên tường
@@ -769,6 +846,39 @@ function level6() {
     }
 }
 
+function drawLv7() {
+    for (let i = 0; i < cols; i++) {
+        if (i > 4 && i < 15){
+            wall.push([i, 3])
+            wall.push([i, 15])
+            wall.push([2, i])
+            wall.push([17, i])
+        }
+    }
+}
+
+function level7() {
+    level1()
+    for (let i = 0; i < wall.length; i++) {
+        if (snakeX == wall[i][0]*recSize && snakeY == wall[i][1]*recSize){
+            gameOver = true
+            clearInterval(intervalTrapTime)
+            showModalLose()
+        }
+    }
+    if ((snakeX == trapX && snakeY == trapY)){
+        if (snakeBody.length == 1){
+            gameOver = true
+            clearInterval(intervalTrapTime)
+            showModalLose()
+        }else {
+            snakeBody.pop()
+            countToUpLv--
+            score.textContent = countToUpLv
+        }
+    }
+}
+
 // Hàm đổi level
 function changeLevel() {
     if (level == 1){
@@ -783,26 +893,30 @@ function changeLevel() {
         level5()
     }else if (level == 6){
         level6()
+    }else if (level == 7){
+        level7()
     }
     upgradeLevel()
 }
 
 // Hàm tự tăng level
 function upgradeLevel() {
-    if (countToUpLv == 5){
+    if (countToUpLv == 10){
         level++
         countToUpLv = 0
         restartGame()
     }
-    if (level == 2){
-        drawLv2()
-    }else if (level == 4){
-        drawLv4()
-    }else if (level == 5){
-        drawLv5()
-    }else if (level == 6){
-        drawLv6()
-    }
+    // if (level == 2){
+    //     drawLv2()
+    // }else if (level == 4){
+    //     drawLv4()
+    // }else if (level == 5){
+    //     drawLv5()
+    // }else if (level == 6){
+    //     drawLv6()
+    // }else if (level == 7){
+    //     drawLv7()
+    // }
 
     setLevelBg()
 }
