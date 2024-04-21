@@ -1,4 +1,4 @@
-// 21130035_Nguyễn_Ngọc_Khánh_Duy_0839151003
+// 21130035_Nguyễn_Ngọc_Khánh_Duy_0839151003_DH21DTA
 
 // khai báo giá trị 1 ô là 25, bàn chơi có 20 hàng và 20 cột
 var recSize = 25
@@ -17,7 +17,7 @@ var foodX = 0;
 var foodY = 0;
 // Tạo hình sử dụng cho thức ăn
 var foodImg = new Image()
-// Gán đường dẫn
+// gán ảnh
 foodImg.src = "./assets/apple.png"
 
 // Toạ độ rắn
@@ -52,7 +52,6 @@ var goldFoodX = 0;
 var goldFoodY = 0;
 // Tạo hình sử dụng cho thức ăn vàng
 var goldFoodImg = new Image()
-// Gán đường dẫn
 goldFoodImg.src = "./assets/golden-apple.png"
 // Biến kiểm tra việc ăn táo vàng có năng lực xuyên tường ở level 5
 var isGold = false;
@@ -107,7 +106,6 @@ modalLoseRestart = document.querySelector(".modal-close #restart")
 // hàm hiển thị thông báo thua
 function showModalLose() {
     modalLose.style.display = "flex"
-    // Gán điểm hiện tại
     modalLoseScore.textContent = countToUpLv
 }
 
@@ -117,10 +115,19 @@ modalLoseRestart.addEventListener("click", function () {
     restartGame()
 })
 
+// hiển thị khi đã vượt qua các màn chơi
+modalWin = document.querySelector(".modal-win")
+// nút đóng
+modalWinClose = document.querySelector(".modal-win #done")
+modalWinClose.addEventListener("click", function () {
+    modalWin.style.display = 'none'
+    showModalHowToPlay()
+})
+
 // Hiển thị hướng dẫn chơi
 modalPlay = document.querySelector(".modal-play")
 modalPlayContainerWrapper = document.querySelector(".modal-play .modal-container .wrapper")
-// Nút bắt đầu chơi
+// nút bắt đầu
 modalPlayStart = document.querySelector(".modal-play #start")
 // Phần tiếp theo và phía trước của hướng dẫn để lựa chọn xem hướng dẫn ở level nào
 modalPlayNext = document.querySelector(".modal-play #next")
@@ -161,7 +168,7 @@ listDesc.push('<li>Level này rắn không có khả năng xuyên tường màn 
 listDesc.push('<li>Level này rắn có khả năng xuyên tường màn chơi</li>' +
               '<li>Level này xuất hiện các vách tường (ô màu đỏ) khi rắn đụng sẽ thua</li>' +
               '<li>Level này xuất hiện các cổng dịch chuyển, các cổng có đánh số là cổng rắn có thể đi vào và ra ở màu tương ứng</li>')
-listDesc.push('<li>Level này rắn có khả năng xuyên tường màn chơi</li>' +
+listDesc.push('<li>Level này rắn không có khả năng xuyên tường màn chơi</li>' +
               '<li>Level này xuất hiện các vách tường (ô màu đỏ) khi rắn đụng sẽ thua</li>' +
               '<li>Level này xuất hiện các bẫy tự thay đổi ngẫu nhiên sau 2s, khi rắn trúng bẫy sẽ giảm đi 1 điểm và khi không còn sẽ thua</li>')
 
@@ -254,11 +261,8 @@ modalPlayPrevious.addEventListener("click", changeHowToPlay)
 // Phần hiển thị khi nhấn vào ?
 question = document.querySelector(".question")
 modalQuestion = document.querySelector(".modal-question")
-// nút hướng dẫn chơi
 modalQuestionHowToPlay = document.querySelector(".modal-question #how-to-play")
-// nút thông tin
 modalQuestionInfo = document.querySelector(".modal-question #info")
-// nút tiếp tục chơi
 modalQuestionResume = document.querySelector(".modal-question #resume")
 
 // Khi nhấn vào ? hiện phần này lên
@@ -469,6 +473,7 @@ function mainProcess() {
     context.drawImage(foodImg, foodX, foodY, recSize, recSize)
 
     // kiểm tra ăn thức ăn
+    // (**4**) chú thích cho giải thích ở dưới
     eatFood()
 
     // Vẽ tường
@@ -542,15 +547,33 @@ function mainProcess() {
 
     // moveX, moveY là các giá trị khi nhấn các nút mũi tên có được nhân với recSize (kích thước 1 ô) để được kích thước đúng
     // Cộng vào snakeX và snakeY để rắn có thể di chuyển
+    // (**3**) chú thích cho giải thích ở dưới
     snakeX += (moveX * recSize)
     snakeY += (moveY * recSize)
 
-    // Rắn di chuyển, theo kiểu sẽ di chuyển 1 phần từ sau lên phần từ trước
+
+    // Rắn di chuyển, theo kiểu sẽ di chuyển 1 phần từ sau lên phần từ trước làm vậy để tạo ra sự chuyển động của rắn
+    /*
+        (**1**): di chuyển 1 phần tử của snakeBody từ sau lên trước
+        (**2**): gán snakeX, snakeY cho phần tử đầu của snakeBody
+        (**3**): cộng moveX, moveY vào snakeX, snakeY
+        (**4**): ăn thức ăn thì thêm foodX, foodY vào snakeBody
+        Ví dụ thức ăn [5, 5], đầu rắn ở vị trí [4, 5] thì snakeBody = [[4, 5]],
+        Nếu di chuyển qua phải thì ban đầu snakeX = 4, snakeY = 5 chưa ăn thức ăn (**4**) chưa có gì, sau đó cộng thêm moveX, moveY (**3**)
+        vào thì snakeX = 5, snakeY = 5, tiếp theo (**1**) ở dưới là snakeBody = [[4, 5]] sau khi chạy lệnh (**2**) ở dưới snakeBody = [[5, 5]]
+        Sau đó chạy hết và lặp lại tiếp tới (**4**) sẽ ăn thức ăn thì snakeBody = [[5, 5], [5, 5]], chạy (**3**) thì snakeX = 6, snakeY = 5
+        (**1**) snakeBody = [[5, 5], [5, 5]], chạy (**2**) snakeBody = [[6, 5], [5, 5]] tiếp tục như vậy thì (**3**) snakeX = 7, snakeY = 5
+        lúc này snakeBody = [[6, 5], [5,5]] (chưa thay đổi gì)
+        chạy (**1**) snakeBody = [[6, 5], [6, 5]] (do đưa phần tử sau bằng phần tử trước)
+        chạy (**2**) snakeBody = [[7,5], [6,5]] vậy là rắn đã di chuyển
+         */
+    // (**1**) chú thích cho giải thích ở trên
     for (let i = snakeBody.length - 1; i > 0 ; i--) {
         snakeBody[i] = snakeBody[i-1]
     }
 
-    // Gán vị trí đầu của phần rắn là snakeX, snakeY (đầu rắn)
+    // Gán lại vị trí đầu của phần rắn là snakeX, snakeY (đầu rắn)
+    // (**2**) chú thích cho giải thích ở trên
     snakeBody[0] = [snakeX, snakeY]
 
     for (let i = 0; i < snakeBody.length; i++) {
@@ -592,7 +615,7 @@ function setUpLv() {
         clearInterval(intervalTimeGame)
     }
     // Nếu không phải các level cấm xuyên tường thì bỏ đường viền
-    if (level != 2 && level != 3 && level != 4 && level != 5){
+    if (level != 2 && level != 3 && level != 4 && level != 5 && level != 7){
         document.getElementById("outBoard").style.border="none"
     }
     // nếu không phải level 5 thì dừng các hàm setInterval của level 5
@@ -772,7 +795,13 @@ function restartGame() {
     countToUpLv = 0
     wall = []
     countTime = 5
-    showModalHowToPlay()
+    // kiểm tra nếu là level 7 thì hiện thông báo hết màn và quay lại level 1
+    if (level > 7){
+        modalWin.style.display = 'flex'
+        level = 1
+    }else {
+        showModalHowToPlay()
+    }
     setUpLv()
     isGold = false
     start = false
@@ -789,7 +818,8 @@ function level2() {
 
 // level 3 đếm thời gian và random thức ăn và rắn không xuyên tường
 function level3() {
-    if (snakeX < 0 || snakeX > (rows * recSize) || snakeY < 0 || snakeY > (cols * recSize)) {
+    // Kiểm tra nếu snakeX < 0 là vách trái hoặc snakeX > (cols * recSize) là vách phải sẽ thua và hiện thông báo thua
+    if (snakeX < 0 || snakeX > (cols * recSize) || snakeY < 0 || snakeY > (rows * recSize)) {
         gameOver = true;
         // Thua sẽ xoá hết các interval trong level
         clearInterval(intervalTimeGame)
@@ -865,7 +895,7 @@ function drawLv5() {
 // level 5 không xuyên tường khi ăn thức ăn vàng
 function level5() {
     // kiểm tra không xuyên tường
-    if (snakeX < 0 || snakeX > (rows * recSize) || snakeY < 0 || snakeY > (cols * recSize)) {
+    if (snakeX < 0 || snakeX > (cols * recSize) || snakeY < 0 || snakeY > (rows * recSize)) {
         gameOver = true;
         // Thua sẽ xoá hết các interval trong level
         clearInterval(intervalCountTime)
@@ -911,6 +941,8 @@ function level6() {
 
 // Thêm tường cho level
 function drawLv7() {
+    // Không cho xuyên tường nên có vẽ viền ở level 2
+    drawLv2()
     for (let i = 0; i < cols; i++) {
         if (i > 4 && i < 15){
             wall.push([i, 3])
@@ -921,10 +953,15 @@ function drawLv7() {
     }
 }
 
-// level 7 xuyên tường và có bẫy
+// level 7 không xuyên tường và có bẫy
 function level7() {
-    // gọi lại level 1 xuyên tường
-    level1()
+    // kiểm tra không xuyên tường
+    if (snakeX < 0 || snakeX > (cols * recSize) || snakeY < 0 || snakeY > (rows * recSize)) {
+        gameOver = true;
+        // Thua sẽ xoá hết các interval trong level
+        clearInterval(intervalTrapTime)
+        showModalLose()
+    }
     // kiểm tra đụng các khối tường bên trong
     for (let i = 0; i < wall.length; i++) {
         if (snakeX == wall[i][0]*recSize && snakeY == wall[i][1]*recSize){
@@ -1017,7 +1054,8 @@ document.addEventListener("keydown", changeDirection)
 
 // Hàm chạy
 function run() {
-     intervalRun = setInterval(mainProcess, 1000/10)
+     // hàm mainProcess() sẽ được gọi lại sau mỗi 100 mili giây (1/10 giây)
+     intervalRun = setInterval(mainProcess, 100)
 }
 run()
 
@@ -1034,3 +1072,4 @@ modalQuestionInfo.addEventListener("click", function () {
 modalInfoClose.addEventListener("click", function () {
     modalInfo.style.display = "none"
 })
+
